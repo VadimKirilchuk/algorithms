@@ -1,4 +1,4 @@
-package ru.vkirilchuk.algorithm.graph;
+package ru.vkirilchuk.algorithm.graph.model.visitors;
 
 import java.util.ArrayList;
 import java.util.Arrays;

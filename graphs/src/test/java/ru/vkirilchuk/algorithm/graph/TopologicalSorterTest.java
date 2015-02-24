@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import ru.vkirilchuk.algorithm.graph.model.visitors.TopologicalSorter;
+
 import com.carrotsearch.randomizedtesting.RandomizedTest;
 
 //TODO: more tests
