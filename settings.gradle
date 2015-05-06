@@ -1,1 +1,6 @@
-include 'graphs'
+rootProject.name = 'Algorithms'
+
+include ':graphs'
+include ':grammar-expressions'
+
+project(':grammar-expressions').projectDir = new File('grammar/expressions')
