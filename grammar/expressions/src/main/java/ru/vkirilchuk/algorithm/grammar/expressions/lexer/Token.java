@@ -1,4 +1,4 @@
-package ru.vkirilchuk.algorithm.grammar.expressions.common;
+package ru.vkirilchuk.algorithm.grammar.expressions.lexer;
 
 /**
  * A token is a pair consisting of a token name and an optional attribute lexeme.

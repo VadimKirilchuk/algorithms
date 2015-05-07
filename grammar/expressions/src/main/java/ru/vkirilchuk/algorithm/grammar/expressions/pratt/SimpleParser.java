@@ -1,17 +1,15 @@
 package ru.vkirilchuk.algorithm.grammar.expressions.pratt;
 
 import ru.vkirilchuk.algorithm.grammar.expressions.common.Precedence;
-import ru.vkirilchuk.algorithm.grammar.expressions.common.TokenType;
+import ru.vkirilchuk.algorithm.grammar.expressions.lexer.TokenType;
 import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.BinaryOperatorParselet;
 import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.GroupParselet;
 import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.IntegerParselet;
 import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.PrefixOperatorParselet;
 
-public class SimpleParser extends PrattParser {
+public class SimpleParser extends PrattParserBase {
 
-    public SimpleParser(String input) {
-        super(input);
-
+    public SimpleParser() {
         // Register all of the parselets for the grammar.
 
         // Register the ones that need special parselets.

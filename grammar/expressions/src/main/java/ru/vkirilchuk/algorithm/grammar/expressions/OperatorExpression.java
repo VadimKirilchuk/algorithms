@@ -1,7 +1,7 @@
 package ru.vkirilchuk.algorithm.grammar.expressions;
 
 import ru.vkirilchuk.algorithm.grammar.expressions.common.Expression;
-import ru.vkirilchuk.algorithm.grammar.expressions.common.Token;
+import ru.vkirilchuk.algorithm.grammar.expressions.lexer.Token;
 
 /**
  * A binary arithmetic expression like "a + b" or "c ^ d".

@@ -1,11 +1,11 @@
 package ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets;
 
-import java.io.IOException;
+import java.util.Iterator;
 
 import ru.vkirilchuk.algorithm.grammar.expressions.PrefixExpression;
 import ru.vkirilchuk.algorithm.grammar.expressions.common.Expression;
-import ru.vkirilchuk.algorithm.grammar.expressions.common.Token;
-import ru.vkirilchuk.algorithm.grammar.expressions.pratt.PrattParser;
+import ru.vkirilchuk.algorithm.grammar.expressions.lexer.Token;
+import ru.vkirilchuk.algorithm.grammar.expressions.pratt.PrattParserBase;
 
 /**
  * Generic prefix parselet for an unary arithmetic operator. Parses prefix
@@ -16,12 +16,12 @@ public class PrefixOperatorParselet implements PrefixParselet {
     mPrecedence = precedence;
   }
 
-  public Expression parse(PrattParser parser, Token token) throws IOException {
+  public Expression parse(PrattParserBase parser, Token token, Iterator<Token> tokenIterator) {
     // To handle right-associative operators like "^", we allow a slightly
     // lower precedence when parsing the right-hand side. This will let a
     // parselet with the same precedence appear on the right, which will then
     // take *this* parselet's result as its left-hand argument.
-    Expression right = parser.parseExpression(mPrecedence);
+    Expression right = parser.parseExpression(mPrecedence, tokenIterator);
 
     return new PrefixExpression(token, right);
   }

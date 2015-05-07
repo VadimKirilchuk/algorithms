@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.RandomizedTest;
@@ -14,6 +15,11 @@ import ru.vkirilchuk.algorithm.grammar.expressions.common.ParseException;
 public class SimpleParserTest extends RandomizedTest {
 
     private SimpleParser underTest;
+
+    @Before
+    public void before() {
+        underTest = new SimpleParser();
+    }
 
     @Test
     public void testRandomOperation() throws IOException {
@@ -43,9 +49,7 @@ public class SimpleParserTest extends RandomizedTest {
 
         String expressionString = first + randomOperation + second;
 
-        underTest = new SimpleParser(expressionString);
-
-        Expression expression = underTest.parseExpression();
+        Expression expression = underTest.parse(expressionString);
         assertNotNull(expression);
 
         assertEquals((int) expectations.get(randomOperationNum), expression.evaluate());
@@ -54,17 +58,16 @@ public class SimpleParserTest extends RandomizedTest {
     @Test(expected = ArithmeticException.class)
     public void testZeroDivideExpression() throws IOException {
         String expressionString = "15 / 0";
-        underTest = new SimpleParser(expressionString);
-        Expression expression = underTest.parseExpression();
+
+        Expression expression = underTest.parse(expressionString);
         expression.evaluate();
     }
 
     @Test(expected = ParseException.class)
     public void testEmptyExpression() throws IOException {
         String expressionString = "";
-        underTest = new SimpleParser(expressionString);
 
-        Expression expression = underTest.parseExpression();
+        Expression expression = underTest.parse(expressionString);
         assertNotNull(expression);
 
         expression.evaluate();
@@ -73,9 +76,8 @@ public class SimpleParserTest extends RandomizedTest {
     @Test(expected = ParseException.class)
     public void testWhitespaceExpression() throws IOException {
         String expressionString = "     \r\n    \n";
-        underTest = new SimpleParser(expressionString);
 
-        Expression expression = underTest.parseExpression();
+        Expression expression = underTest.parse(expressionString);
         assertNotNull(expression);
 
         expression.evaluate();
@@ -84,9 +86,8 @@ public class SimpleParserTest extends RandomizedTest {
     @Test
     public void testSimpleExpression() throws IOException {
         String expressionString = "1 + 2 * 5";
-        underTest = new SimpleParser(expressionString);
 
-        Expression expression = underTest.parseExpression();
+        Expression expression = underTest.parse(expressionString);
         assertNotNull(expression);
         assertEquals(11, expression.evaluate());
     }
@@ -95,21 +96,20 @@ public class SimpleParserTest extends RandomizedTest {
     public void testComplexExpression() throws IOException {
         String expressionString = "-(2 + 3) * 5 - 6 - 7 + (-5 / 5) * 2 + 1";
         // -25 - 13 -2 + 1 = -39
-        underTest = new SimpleParser(expressionString);
 
-        Expression expression = underTest.parseExpression();
+        Expression expression = underTest.parse(expressionString);
         assertNotNull(expression);
+
         assertEquals(-39, expression.evaluate());
     }
 
     @Test
     public void testParExpression() throws IOException {
         String expressionString = "(1 + 2) * 5";
-        underTest = new SimpleParser(expressionString);
 
-        Expression expression = underTest.parseExpression();
-        System.out.println(expression);
+        Expression expression = underTest.parse(expressionString);
         assertNotNull(expression);
+
         assertEquals(15, expression.evaluate());
     }
 }

@@ -1,4 +1,4 @@
-package ru.vkirilchuk.algorithm.grammar.expressions.common;
+package ru.vkirilchuk.algorithm.grammar.expressions.lexer;
 
 public enum TokenType {
     //TODO: is it just type?

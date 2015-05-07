@@ -1,10 +1,10 @@
 package ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets;
 
-import java.io.IOException;
+import java.util.Iterator;
 
 import ru.vkirilchuk.algorithm.grammar.expressions.common.Expression;
-import ru.vkirilchuk.algorithm.grammar.expressions.common.Token;
-import ru.vkirilchuk.algorithm.grammar.expressions.pratt.PrattParser;
+import ru.vkirilchuk.algorithm.grammar.expressions.lexer.Token;
+import ru.vkirilchuk.algorithm.grammar.expressions.pratt.PrattParserBase;
 
 /**
  * One of the two parselet interfaces used by the Pratt parser. An InfixParselet is associated with a token that appears
@@ -14,7 +14,7 @@ import ru.vkirilchuk.algorithm.grammar.expressions.pratt.PrattParser;
  */
 public interface InfixParselet {
 
-    Expression parse(PrattParser parser, Expression left, Token token) throws IOException;
+    Expression parse(PrattParserBase parser, Expression left, Token token, Iterator<Token> tokenIterator);
 
     int getPrecedence();
 }
