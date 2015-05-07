@@ -67,7 +67,7 @@ public class LexicalAnalyzer {
                 character = (char) characterCode;
             } while ((characterCode != -1) && Character.isDigit(character));
             reader.reset();
-            return new Token(TokenType.IDENTIFIER, numberBuilder.toString(), line, column);
+            return new Token(TokenType.NUMBER, numberBuilder.toString(), line, column);
         }
 
         throw new UnsupportedOperationException("Unsupported character: " + character); // TODO:

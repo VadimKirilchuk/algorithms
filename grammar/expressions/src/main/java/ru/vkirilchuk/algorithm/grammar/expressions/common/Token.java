@@ -42,4 +42,11 @@ public class Token {
     public int getColumn() {
         return column;
     }
+
+    @Override
+    public String toString() {
+        return "Token [type=" + type + ", lexeme=" + lexeme + ", line=" + line + ", column=" + column + "]";
+    }
+
+
 }

@@ -4,7 +4,7 @@ import ru.vkirilchuk.algorithm.grammar.expressions.common.Precedence;
 import ru.vkirilchuk.algorithm.grammar.expressions.common.TokenType;
 import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.BinaryOperatorParselet;
 import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.GroupParselet;
-import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.NameParselet;
+import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.IntegerParselet;
 import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.PrefixOperatorParselet;
 
 public class SimpleParser extends PrattParser {
@@ -15,7 +15,7 @@ public class SimpleParser extends PrattParser {
         // Register all of the parselets for the grammar.
 
         // Register the ones that need special parselets.
-        register(TokenType.IDENTIFIER, new NameParselet());
+        register(TokenType.NUMBER, new IntegerParselet());
         register(TokenType.LEFT_PAR, new GroupParselet());
 
         // Register the simple operator parselets.

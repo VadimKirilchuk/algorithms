@@ -48,6 +48,17 @@ public class PrattParser {
 
     public Expression parseExpression(int precedence) throws IOException {
         Token token = consume();
+
+        if (token.getType() == TokenType.END_OF_STREAM) {
+            return new Expression() {
+
+                @Override
+                public int evaluate() {
+                    throw new ParseException("Unexpected end of stream");
+                }
+            };
+        }
+
         PrefixParselet prefix = prefixParselets.get(token.getType());
 
         if (prefix == null) {
