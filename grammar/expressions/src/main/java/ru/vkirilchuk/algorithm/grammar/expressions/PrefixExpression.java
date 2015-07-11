@@ -2,6 +2,7 @@ package ru.vkirilchuk.algorithm.grammar.expressions;
 
 import ru.vkirilchuk.algorithm.grammar.expressions.common.Expression;
 import ru.vkirilchuk.algorithm.grammar.expressions.lexer.Token;
+import ru.vkirilchuk.algorithm.grammar.expressions.lexer.TokenType;
 
 /**
  * A prefix unary arithmetic expression like "!a" or "-b".
@@ -17,7 +18,7 @@ public class PrefixExpression implements Expression {
 
     @Override
     public int evaluate() {
-        if("-".equals(operatorToken.getLexeme())) {
+        if (TokenType.MINUS == operatorToken.getType()) {
             return -expression.evaluate();
         }
 

@@ -2,6 +2,7 @@ package ru.vkirilchuk.algorithm.grammar.expressions;
 
 import ru.vkirilchuk.algorithm.grammar.expressions.common.Expression;
 import ru.vkirilchuk.algorithm.grammar.expressions.lexer.Token;
+import ru.vkirilchuk.algorithm.grammar.expressions.lexer.TokenType;
 
 /**
  * A binary arithmetic expression like "a + b" or "c ^ d".
@@ -19,24 +20,24 @@ public class OperatorExpression implements Expression {
 
     @Override
     public int evaluate() {
-        String lexeme = operatorToken.getLexeme();
+        TokenType type = operatorToken.getType();
 
         int leftValue = leftExpression.evaluate();
         int rightValue = rightExpression.evaluate();
 
-        if ("+".equals(lexeme)) {
+        if (TokenType.PLUS == type) {
             return leftValue + rightValue;
         }
 
-        if ("-".equals(lexeme)) {
+        if (TokenType.MINUS == type) {
             return leftValue - rightValue;
         }
 
-        if ("*".equals(lexeme)) {
+        if (TokenType.MUL == type) {
             return leftValue * rightValue;
         }
 
-        if ("/".equals(lexeme)) {
+        if (TokenType.DIV == type) {
             return leftValue / rightValue;
         }
 

@@ -17,10 +17,9 @@ import ru.vkirilchuk.algorithm.grammar.expressions.lexer.TokenType;
 import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.InfixParselet;
 import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.PrefixParselet;
 
-public class PrattParserBase implements Parser {
+public class PrattParser implements Parser {
 
     private final Lexer lexer = new Lexer();
-    private final List<Token> aheadTokens = new ArrayList<Token>();
     private final Map<TokenType, PrefixParselet> prefixParselets = new HashMap<TokenType, PrefixParselet>();
     private final Map<TokenType, InfixParselet> infixParselets = new HashMap<TokenType, InfixParselet>();
 
@@ -41,24 +40,19 @@ public class PrattParserBase implements Parser {
     @Override
     public Expression parse(Reader input) {
         Iterator<Token> tokenIterator = lexer.parse(input);
-        return parseExpression(tokenIterator);
+        List<Token> aheadTokens = new ArrayList<Token>();
+        return parseExpression(tokenIterator, aheadTokens);
     }
 
-    public Expression parseExpression(Iterator<Token> tokenIterator) {
-        return parseExpression(0, tokenIterator);
+    public Expression parseExpression(Iterator<Token> tokenIterator, List<Token> aheadTokens) {
+        return parseExpression(0, tokenIterator, aheadTokens);
     }
 
-    public Expression parseExpression(int precedence, Iterator<Token> tokenIterator) {
-        Token token = consume(tokenIterator);
+    public Expression parseExpression(int precedence, Iterator<Token> tokenIterator, List<Token> aheadTokens) {
+        Token token = consume(tokenIterator, aheadTokens);
 
         if (token.getType() == TokenType.END_OF_STREAM) {
-            return new Expression() {
-
-                @Override
-                public int evaluate() {
-                    throw new ParseException("Unexpected end of stream");
-                }
-            };
+            throw new ParseException("Unexpected end of stream");
         }
 
         PrefixParselet prefix = prefixParselets.get(token.getType());
@@ -67,45 +61,45 @@ public class PrattParserBase implements Parser {
             throw new ParseException("Could not parse \"" + token.getLexeme() + "\".");
         }
 
-        Expression left = prefix.parse(this, token, tokenIterator);
+        Expression left = prefix.parse(this, token, tokenIterator, aheadTokens);
 
-        while (precedence < getPrecedence(tokenIterator)) {
-            token = consume(tokenIterator);
+        while (precedence < getPrecedence(tokenIterator, aheadTokens)) {
+            token = consume(tokenIterator, aheadTokens);
 
             InfixParselet infix = infixParselets.get(token.getType());
-            left = infix.parse(this, left, token, tokenIterator);
+            left = infix.parse(this, left, token, tokenIterator, aheadTokens);
         }
 
         return left;
     }
 
-    public boolean match(TokenType expected, Iterator<Token> tokenIterator) {
-        Token token = lookAhead(0, tokenIterator);
+    public boolean match(TokenType expected, Iterator<Token> tokenIterator, List<Token> aheadTokens) {
+        Token token = lookAhead(0, tokenIterator, aheadTokens);
         if (token.getType() != expected) {
             return false;
         }
 
-        consume(tokenIterator);
+        consume(tokenIterator, aheadTokens);
         return true;
     }
 
-    public Token consume(TokenType expected, Iterator<Token> tokenIterator) {
-        Token token = lookAhead(0, tokenIterator);
+    public Token consume(TokenType expected, Iterator<Token> tokenIterator, List<Token> aheadTokens) {
+        Token token = lookAhead(0, tokenIterator, aheadTokens);
         if (token.getType() != expected) {
             throw new RuntimeException("Expected token " + expected + " and found " + token.getType());
         }
 
-        return consume(tokenIterator);
+        return consume(tokenIterator, aheadTokens);
     }
 
-    public Token consume(Iterator<Token> tokenIterator) {
+    public Token consume(Iterator<Token> tokenIterator, List<Token> aheadTokens) {
         // Make sure we've read the token.
-        lookAhead(0, tokenIterator);
+        lookAhead(0, tokenIterator, aheadTokens);
 
         return aheadTokens.remove(0);
     }
 
-    private Token lookAhead(int distance, Iterator<Token> tokenIterator) {
+    private Token lookAhead(int distance, Iterator<Token> tokenIterator, List<Token> aheadTokens) {
         // Read in as many as needed.
         while (distance >= aheadTokens.size()) {
             aheadTokens.add(tokenIterator.next());
@@ -115,8 +109,8 @@ public class PrattParserBase implements Parser {
         return aheadTokens.get(distance);
     }
 
-    private int getPrecedence(Iterator<Token> tokenIterator) {
-        InfixParselet parser = infixParselets.get(lookAhead(0, tokenIterator).getType());
+    private int getPrecedence(Iterator<Token> tokenIterator,  List<Token> aheadTokens) {
+        InfixParselet parser = infixParselets.get(lookAhead(0, tokenIterator, aheadTokens).getType());
         if (parser != null) {
             return parser.getPrecedence();
         }

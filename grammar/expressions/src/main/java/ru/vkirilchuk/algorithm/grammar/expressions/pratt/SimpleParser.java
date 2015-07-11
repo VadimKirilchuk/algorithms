@@ -7,7 +7,7 @@ import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.GroupParselet
 import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.IntegerParselet;
 import ru.vkirilchuk.algorithm.grammar.expressions.pratt.parcelets.PrefixOperatorParselet;
 
-public class SimpleParser extends PrattParserBase {
+public class SimpleParser extends PrattParser {
 
     public SimpleParser() {
         // Register all of the parselets for the grammar.
